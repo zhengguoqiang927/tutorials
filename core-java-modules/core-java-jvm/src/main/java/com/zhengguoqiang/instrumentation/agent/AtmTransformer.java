@@ -56,7 +56,12 @@ public class AtmTransformer implements ClassFileTransformer {
                 endBlock.append("LOGGER.info(\"[Application] Withdrawal operation completed in:\" + opTime + \" seconds!\");");
 
                 ctMethod.insertAfter(endBlock.toString());
+                ctMethod.addCatch("{LOGGER.error(\"this method has an error.\",$e);return;}",classPool.get("java.io.IOException"));
 
+                CtMethod m = CtNewMethod.make(
+                        "public int xmove(int dx) { LOGGER.info(\"value is {}\",dx);}",
+                        ctClass);
+                ctClass.addMethod(m);
                 byteCode = ctClass.toBytecode();
                 ctClass.detach();
             } catch (NotFoundException | CannotCompileException | IOException e) {
