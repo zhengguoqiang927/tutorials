@@ -29,7 +29,7 @@ public class AtmTransformer implements ClassFileTransformer {
     @Override
     public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined,
                             ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
-        LOGGER.info("premain load Class:{}",className);
+        LOGGER.info("premain load Class:{},classloader:{}",className,loader.getClass().getSimpleName());
         byte[] byteCode = classfileBuffer;
 
         String finalTargetClassName = this.targetClassName.replaceAll("\\.", "/");//replace . with /
@@ -56,12 +56,12 @@ public class AtmTransformer implements ClassFileTransformer {
                 endBlock.append("LOGGER.info(\"[Application] Withdrawal operation completed in:\" + opTime + \" seconds!\");");
 
                 ctMethod.insertAfter(endBlock.toString());
-                ctMethod.addCatch("{LOGGER.error(\"this method has an error.\",$e);return;}",classPool.get("java.io.IOException"));
+                ctMethod.addCatch("{LOGGER.error(\"this method has an error.\",$e);return $r;}",classPool.get("java.io.IOException"));
 
-                CtMethod m = CtNewMethod.make(
-                        "public int xmove(int dx) { LOGGER.info(\"value is {}\",dx);}",
-                        ctClass);
-                ctClass.addMethod(m);
+//                CtMethod m = CtNewMethod.make(
+//                        "public int xmove(int dx) { LOGGER.info(\"value is {}\",dx);}",
+//                        ctClass);
+//                ctClass.addMethod(m);
                 byteCode = ctClass.toBytecode();
                 ctClass.detach();
             } catch (NotFoundException | CannotCompileException | IOException e) {
