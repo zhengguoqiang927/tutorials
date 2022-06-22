@@ -16,10 +16,10 @@ public class AtmTransformer implements ClassFileTransformer {
     private static final String WITHDRAW_MONEY_METHOD = "withdrawMoney";
 
     /** The internal form class name of the class to transform */
-    private String targetClassName;
+    private final String targetClassName;
 
     /** The class loader of the class we want to transform */
-    private ClassLoader targetClassLoader;
+    private final ClassLoader targetClassLoader;
 
     public AtmTransformer(String targetClassName, ClassLoader targetClassLoader) {
         this.targetClassName = targetClassName;
@@ -29,7 +29,7 @@ public class AtmTransformer implements ClassFileTransformer {
     @Override
     public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined,
                             ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
-        LOGGER.info("premain load Class:{},classloader:{}",className,loader.getClass().getSimpleName());
+        LOGGER.info("premain load class:{},classloader:{}",className,loader.getClass().getSimpleName());
         byte[] byteCode = classfileBuffer;
 
         String finalTargetClassName = this.targetClassName.replaceAll("\\.", "/");//replace . with /

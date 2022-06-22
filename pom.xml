@@ -8,6 +8,7 @@
     <modules>
         <module>core-java-modules</module>
         <module>algorithms</module>
+        <module>cache</module>
     </modules>
     <name>tutorials</name>
     <url>http://maven.apache.org</url>
@@ -45,6 +46,12 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/caffeine -->
+            <dependency>
+                <groupId>com.github.ben-manes.caffeine</groupId>
+                <artifactId>caffeine</artifactId>
+                <version>3.1.1</version>
+            </dependency>
             <!-- logging -->
             <dependency>
                 <groupId>org.slf4j</groupId>
