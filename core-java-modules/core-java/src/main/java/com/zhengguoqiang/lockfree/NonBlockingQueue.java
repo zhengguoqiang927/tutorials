@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class NonBlockingQueue<T> {
 
-    private class Node<T>{
+    private static class Node<T>{
         private volatile T value;
         private volatile Node<T> next;
         private volatile Node<T> prev;
@@ -43,12 +43,13 @@ public class NonBlockingQueue<T> {
 
     private final AtomicReference<Node<T>> head,tail;
     private final AtomicInteger size;
+    private static final int DEFAULT_CAPACITY = 8;
 
-    public NonBlockingQueue(){
+    public NonBlockingQueue(int capacity){
         head = new AtomicReference<>(null);
         tail = new AtomicReference<>(null);
         size = new AtomicInteger();
-        size.set(0);
+        size.set(capacity < 1 ? DEFAULT_CAPACITY : capacity);
     }
 
 
